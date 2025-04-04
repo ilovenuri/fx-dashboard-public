@@ -2,6 +2,11 @@
 
 실시간으로 주요 통화(USD, EUR, CAD, AUD)의 대한민국 원화(KRW) 환율을 확인하고 계산할 수 있는 대시보드입니다.
 
+## 데모
+
+온라인 데모는 다음 URL에서 확인할 수 있습니다:
+https://jjkk-fx-dashboard.streamlit.app/
+
 ## 주요 기능
 
 - 실시간 환율 모니터링 (USD, EUR, CAD, AUD)
@@ -12,17 +17,12 @@
 - 수동 새로고침 기능
 - 모바일 화면 지원
 
-## 데모
-
-온라인 데모는 다음 URL에서 확인할 수 있습니다:
-[Streamlit Cloud URL]
-
 ## 로컬 실행 방법
 
 1. 저장소 클론
 ```bash
-git clone [repository-url]
-cd [repository-name]
+git clone https://github.com/ilovenuri/fx-dashboard-public.git
+cd fx-dashboard-public
 ```
 
 2. 가상환경 생성 및 활성화
