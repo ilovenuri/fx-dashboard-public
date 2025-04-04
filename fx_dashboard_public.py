@@ -28,16 +28,14 @@ st.markdown("""
         color: white;
     }
     .stMetric {
-        background-color: #f8f9fa;
+        border: 1px solid #e0e0e0;
         padding: 10px;
         border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     div[data-testid="metric-container"] {
-        background-color: #f8f9fa;
+        border: 1px solid #e0e0e0;
         padding: 10px;
         border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     div[data-testid="stVerticalBlock"] > div {
         padding: 5px;
@@ -68,12 +66,11 @@ st.markdown("""
     }
     /* 환율 계산기 결과 스타일 개선 */
     .exchange-result {
-        background-color: #E3F2FD;
+        border: 1px solid #90CAF9;
         padding: 20px;
         border-radius: 10px;
         margin: 10px 0;
         text-align: center;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .exchange-result h3 {
         color: #1976D2;
@@ -88,10 +85,9 @@ st.markdown("""
     }
     /* 차트 컨테이너 스타일 */
     .chart-container {
-        background-color: white;
+        border: 1px solid #e0e0e0;
         padding: 15px;
         border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         margin: 10px 0;
     }
     /* 섹션 제목 스타일 */
