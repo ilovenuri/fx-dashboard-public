@@ -421,8 +421,8 @@ with st.container():
     # 초기 상태 설정
     if 'swap_clicked' not in st.session_state:
         st.session_state.swap_clicked = False
-        st.session_state.from_index = 0  # KRW
-        st.session_state.to_index = 1    # USD
+        st.session_state.from_index = currency_options.index('USD')  # USD
+        st.session_state.to_index = currency_options.index('KRW')    # KRW
     
     def swap_currencies():
         st.session_state.swap_clicked = True
