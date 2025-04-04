@@ -424,11 +424,12 @@ with st.container():
             step=100.0,
             format="%.2f"
         )
+        currency_options = ['KRW'] + list(CURRENCIES.keys())
         from_currency = st.selectbox(
             "변환할 통화",
-            ['KRW'] + list(CURRENCIES.keys()),
+            currency_options,
             key='from_currency',
-            index=['KRW'] + list(CURRENCIES.keys()).index(st.session_state.from_currency)
+            index=currency_options.index(st.session_state.from_currency)
         )
 
     with col2:
@@ -443,9 +444,9 @@ with st.container():
     with col3:
         to_currency = st.selectbox(
             "변환된 통화",
-            ['KRW'] + list(CURRENCIES.keys()),
+            currency_options,
             key='to_currency',
-            index=['KRW'] + list(CURRENCIES.keys()).index(st.session_state.to_currency)
+            index=currency_options.index(st.session_state.to_currency)
         )
 
 # 환율 계산 및 결과 표시
