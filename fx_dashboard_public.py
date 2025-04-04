@@ -48,6 +48,58 @@ st.markdown("""
     .main {
         background: #fafafa;
     }
+    /* 환율 표시 스타일 개선 */
+    div[data-testid="stMetricValue"] {
+        color: #1E88E5 !important;
+        font-size: 1.5rem !important;
+        font-weight: bold !important;
+    }
+    div[data-testid="stMetricDelta"] {
+        font-size: 1rem !important;
+    }
+    div[data-testid="stMetricLabel"] {
+        color: #424242 !important;
+        font-size: 1rem !important;
+    }
+    /* 환율 계산기 결과 스타일 개선 */
+    .exchange-result {
+        background-color: #E3F2FD;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 10px 0;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .exchange-result h3 {
+        color: #1976D2;
+        margin: 0;
+        font-size: 1.2rem;
+    }
+    .exchange-result p {
+        color: #1565C0;
+        font-size: 1.5rem;
+        margin: 10px 0;
+        font-weight: bold;
+    }
+    /* 차트 컨테이너 스타일 */
+    .chart-container {
+        background-color: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin: 10px 0;
+    }
+    /* 섹션 제목 스타일 */
+    h2 {
+        color: #1976D2;
+        font-size: 1.5rem;
+        margin: 1.5rem 0 1rem 0;
+    }
+    /* 캡션 스타일 */
+    .stCaption {
+        color: #666666;
+        font-size: 0.9rem;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -278,12 +330,14 @@ for i in range(0, len(CURRENCIES), chart_columns):
         if i + j < len(CURRENCIES):
             currency = list(CURRENCIES.keys())[i + j]
             with cols[j]:
+                st.markdown('<div class="chart-container">', unsafe_allow_html=True)
                 chart = create_currency_chart(
                     rates_data[currency],
                     currency,
                     CURRENCIES[currency]
                 )
                 st.altair_chart(chart, use_container_width=True)
+                st.markdown('</div>', unsafe_allow_html=True)
 
 # 하단 섹션: 환율 계산기
 st.markdown("---")
@@ -329,16 +383,9 @@ converted_amount = calculate_exchange(amount, from_currency, to_currency, rates_
 with st.container():
     st.markdown(
         f"""
-        <div style='
-            background-color: #f0f8ff;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 10px 0;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        '>
-            <h3 style='margin: 0;'>변환 결과</h3>
-            <p style='font-size: 24px; margin: 10px 0;'>
+        <div class="exchange-result">
+            <h3>변환 결과</h3>
+            <p>
                 {amount:,.2f} {from_currency} = {converted_amount:,.2f} {to_currency}
             </p>
         </div>
