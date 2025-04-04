@@ -92,15 +92,6 @@ st.markdown("""
         text-shadow: 0 0 10px rgba(0,255,0,0.3);
     }
     
-    /* 차트 컨테이너 스타일 */
-    .chart-container {
-        background-color: #1E1E1E;
-        padding: 20px;
-        border-radius: 10px;
-        margin: 15px 0;
-        border: 1px solid #333333;
-    }
-    
     /* 섹션 제목 스타일 */
     h1, h2, h3 {
         color: #FFFFFF !important;
@@ -380,14 +371,12 @@ for i in range(0, len(CURRENCIES), chart_columns):
         if i + j < len(CURRENCIES):
             currency = list(CURRENCIES.keys())[i + j]
             with cols[j]:
-                st.markdown('<div class="chart-container">', unsafe_allow_html=True)
                 chart = create_currency_chart(
                     rates_data[currency],
                     currency,
                     CURRENCIES[currency]
                 )
                 st.altair_chart(chart, use_container_width=True)
-                st.markdown('</div>', unsafe_allow_html=True)
 
 # 하단 섹션: 환율 계산기
 st.markdown("---")
