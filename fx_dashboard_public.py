@@ -446,7 +446,7 @@ with st.container():
     if 'to_index' not in st.session_state:
         st.session_state.to_index = currency_options.index('KRW')
     if 'amount' not in st.session_state:
-        st.session_state.amount = 1000.0
+        st.session_state.amount = 1.0
     
     # 2열 레이아웃
     col1, col2 = st.columns(2)
