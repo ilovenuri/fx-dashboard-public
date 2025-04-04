@@ -20,6 +20,11 @@ st.set_page_config(
 # CSS 스타일 적용
 st.markdown("""
 <style>
+    /* 전체 배경색 설정 */
+    .stApp {
+        background-color: #0E1117;
+    }
+    
     .stButton>button {
         width: 100%;
         border-radius: 5px;
@@ -27,79 +32,96 @@ st.markdown("""
         background-color: #4CAF50;
         color: white;
     }
+    
+    /* 환율 메트릭 컨테이너 스타일 */
     .stMetric {
-        border: 1px solid #e0e0e0;
-        padding: 15px;
-        border-radius: 5px;
-    }
-    div[data-testid="metric-container"] {
-        border: 1px solid #e0e0e0;
-        padding: 15px;
-        border-radius: 5px;
-    }
-    div[data-testid="stVerticalBlock"] > div {
-        padding: 5px;
-    }
-    .reportview-container {
-        background: #fafafa;
-    }
-    .main {
-        background: #fafafa;
-    }
-    /* 환율 표시 스타일 개선 */
-    div[data-testid="stMetricValue"] {
-        color: #1E88E5 !important;
-        font-size: 2rem !important;
-        font-weight: bold !important;
-    }
-    div[data-testid="stMetricDelta"] {
-        font-size: 1.2rem !important;
-        padding-top: 0.5rem !important;
-    }
-    div[data-testid="stMetricLabel"] {
-        color: #424242 !important;
-        font-size: 1.2rem !important;
-        font-weight: 500 !important;
-    }
-    /* 통화 설명 스타일 */
-    div[data-testid="stMetricLabel"] span {
-        color: #424242 !important;
-        font-size: 1rem !important;
-    }
-    /* 환율 계산기 결과 스타일 개선 */
-    .exchange-result {
-        border: 1px solid #90CAF9;
+        background-color: #1E1E1E;
+        border: 1px solid #333333;
         padding: 20px;
         border-radius: 10px;
-        margin: 10px 0;
+    }
+    div[data-testid="metric-container"] {
+        background-color: #1E1E1E;
+        border: 1px solid #333333;
+        padding: 20px;
+        border-radius: 10px;
+    }
+    
+    /* 환율 표시 스타일 개선 */
+    div[data-testid="stMetricValue"] {
+        color: #00FF00 !important;
+        font-size: 2.5rem !important;
+        font-weight: bold !important;
+        text-shadow: 0 0 10px rgba(0,255,0,0.3);
+    }
+    div[data-testid="stMetricDelta"] {
+        font-size: 1.4rem !important;
+        padding-top: 0.8rem !important;
+    }
+    div[data-testid="stMetricLabel"] {
+        color: #FFFFFF !important;
+        font-size: 1.4rem !important;
+        font-weight: 500 !important;
+    }
+    
+    /* 통화 설명 스타일 */
+    div[data-testid="stMetricLabel"] span {
+        color: #FFFFFF !important;
+        font-size: 1.2rem !important;
+    }
+    
+    /* 환율 계산기 결과 스타일 */
+    .exchange-result {
+        background-color: #1E1E1E;
+        border: 1px solid #333333;
+        padding: 25px;
+        border-radius: 10px;
+        margin: 15px 0;
         text-align: center;
     }
     .exchange-result h3 {
-        color: #1976D2;
+        color: #FFFFFF;
         margin: 0;
-        font-size: 1.2rem;
+        font-size: 1.4rem;
     }
     .exchange-result p {
-        color: #1565C0;
-        font-size: 1.8rem;
-        margin: 10px 0;
+        color: #00FF00;
+        font-size: 2.2rem;
+        margin: 15px 0;
         font-weight: bold;
+        text-shadow: 0 0 10px rgba(0,255,0,0.3);
     }
+    
     /* 차트 컨테이너 스타일 */
     .chart-container {
-        padding: 5px;
-        margin: 10px 0;
+        background-color: #1E1E1E;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 15px 0;
+        border: 1px solid #333333;
     }
+    
     /* 섹션 제목 스타일 */
-    h2 {
-        color: #1976D2;
-        font-size: 1.5rem;
-        margin: 1.5rem 0 1rem 0;
+    h1, h2, h3 {
+        color: #FFFFFF !important;
     }
+    
     /* 캡션 스타일 */
     .stCaption {
-        color: #666666;
-        font-size: 0.9rem;
+        color: #CCCCCC !important;
+        font-size: 1rem !important;
+    }
+    
+    /* 입력 필드 스타일 */
+    .stNumberInput input {
+        background-color: #1E1E1E !important;
+        color: #FFFFFF !important;
+        border: 1px solid #333333 !important;
+    }
+    .stSelectbox select {
+        background-color: #1E1E1E !important;
+        color: #FFFFFF !important;
+        border: 1px solid #333333 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -209,6 +231,17 @@ def create_currency_chart(df, currency, currency_info):
     y_min = min(df_with_prediction['환율'].min() - 50, df['환율'].min() - 50)
     y_max = max(df_with_prediction['환율'].max() + 50, df['환율'].max() + 50)
     
+    # 차트 테마 설정
+    config = {
+        "background": "#1E1E1E",
+        "title": {"color": "#FFFFFF"},
+        "axis": {
+            "labelColor": "#FFFFFF",
+            "titleColor": "#FFFFFF",
+            "gridColor": "#333333"
+        }
+    }
+    
     # 실제 데이터 라인
     base = alt.Chart(df_with_prediction).encode(
         x=alt.X('날짜:T', 
@@ -216,7 +249,9 @@ def create_currency_chart(df, currency, currency_info):
                 axis=alt.Axis(
                     format='%m/%d',
                     labelAngle=-45,
-                    labelFontSize=12
+                    labelFontSize=14,
+                    titleFontSize=16,
+                    grid=True
                 )),
         y=alt.Y('환율:Q', 
                 title='환율 (KRW)',
@@ -224,7 +259,9 @@ def create_currency_chart(df, currency, currency_info):
                     domain=[y_min, y_max]
                 ),
                 axis=alt.Axis(
-                    labelFontSize=12
+                    labelFontSize=14,
+                    titleFontSize=16,
+                    grid=True
                 )),
         color=alt.Color('구분:N', 
                        scale=alt.Scale(
@@ -233,44 +270,56 @@ def create_currency_chart(df, currency, currency_info):
                        ),
                        legend=alt.Legend(
                            title="데이터 구분",
-                           orient="top-right"
+                           orient="top-right",
+                           labelFontSize=12,
+                           titleFontSize=14
                        )),
         tooltip=['날짜', '환율', '구분']
     ).properties(
         title=alt.TitleParams(
             text=f'{currency}/KRW ({currency_info["name"]}) 환율 추이 및 예측',
-            fontSize=14,
-            subtitle=f'범위: {y_min:,.0f}원 ~ {y_max:,.0f}원'
+            fontSize=16,
+            subtitle=f'범위: {y_min:,.0f}원 ~ {y_max:,.0f}원',
+            color='white'
         )
     )
     
     # 실제 데이터 라인
     actual_line = base.mark_line(
-        size=3
+        size=4
     ).transform_filter(
         alt.datum.구분 == '실제'
     )
     
     # 예측 데이터 라인
     prediction_line = base.mark_line(
-        size=3,
-        strokeDash=[6, 4]
+        size=4,
+        strokeDash=[8, 6]
     ).transform_filter(
         alt.datum.구분 == '예측'
     )
     
     # 차트 결합
     chart = (actual_line + prediction_line).properties(
-        height=350  # 차트 높이 조정
+        height=400  # 차트 높이 증가
     ).configure_axis(
-        labelFontSize=12,
-        titleFontSize=14
+        labelFontSize=14,
+        titleFontSize=16,
+        gridColor='#333333',
+        domainColor='#666666'
     ).configure_title(
-        fontSize=16,
-        anchor='start'
+        fontSize=18,
+        anchor='start',
+        color='#FFFFFF'
     ).configure_legend(
-        labelFontSize=12,
-        titleFontSize=14
+        labelFontSize=14,
+        titleFontSize=16,
+        fillColor='#1E1E1E',
+        strokeColor='#333333',
+        labelColor='#FFFFFF',
+        titleColor='#FFFFFF'
+    ).configure_view(
+        strokeWidth=0
     )
     
     return chart
