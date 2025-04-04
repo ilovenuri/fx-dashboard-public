@@ -29,8 +29,32 @@ st.markdown("""
         width: 100%;
         border-radius: 5px;
         height: 3em;
-        background-color: #4CAF50;
-        color: white;
+        background-color: #1E1E1E !important;
+        color: #FFFFFF !important;
+        border: 1px solid #333333 !important;
+        font-size: 1.2rem !important;
+    }
+    
+    .stButton>button:hover {
+        background-color: #333333 !important;
+        border-color: #666666 !important;
+    }
+    
+    /* 통화 교환 버튼 스타일 */
+    button[data-testid="baseButton-secondary"] {
+        background-color: #1E1E1E !important;
+        color: #FFFFFF !important;
+        border: 1px solid #333333 !important;
+        padding: 0.5rem !important;
+        font-size: 1.2rem !important;
+        width: 100% !important;
+        height: 3em !important;
+        margin-top: 1.5rem !important;
+    }
+    
+    button[data-testid="baseButton-secondary"]:hover {
+        background-color: #333333 !important;
+        border-color: #666666 !important;
     }
     
     /* 환율 메트릭 컨테이너 스타일 */
@@ -403,12 +427,15 @@ with st.container():
     with col2:
         st.write("")
         st.write("")
-        st.write("")
         if st.button("⇄", help="통화 교환", key="swap"):
             st.session_state.from_currency, st.session_state.to_currency = st.session_state.to_currency, st.session_state.from_currency
             st.experimental_rerun()
 
     with col3:
+        # 초기 상태 설정
+        if 'to_currency' not in st.session_state:
+            st.session_state.to_currency = 'USD'
+            
         to_currency = st.selectbox(
             "변환된 통화",
             ['KRW'] + list(CURRENCIES.keys()),
