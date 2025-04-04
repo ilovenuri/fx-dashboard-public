@@ -346,6 +346,12 @@ st.title("💱 환율 대시보드")
 if 'last_refresh' not in st.session_state:
     st.session_state.last_refresh = time.time()
 
+# session state 초기화
+if 'from_currency' not in st.session_state:
+    st.session_state.from_currency = 'KRW'
+if 'to_currency' not in st.session_state:
+    st.session_state.to_currency = 'USD'
+
 # 10분마다 자동 새로고침
 if time.time() - st.session_state.last_refresh > 600:
     st.session_state.last_refresh = time.time()
@@ -421,25 +427,25 @@ with st.container():
         from_currency = st.selectbox(
             "변환할 통화",
             ['KRW'] + list(CURRENCIES.keys()),
-            key='from_currency'
+            key='from_currency',
+            index=['KRW'] + list(CURRENCIES.keys()).index(st.session_state.from_currency)
         )
 
     with col2:
         st.write("")
         st.write("")
         if st.button("⇄", help="통화 교환", key="swap"):
-            st.session_state.from_currency, st.session_state.to_currency = st.session_state.to_currency, st.session_state.from_currency
+            temp = st.session_state.from_currency
+            st.session_state.from_currency = st.session_state.to_currency
+            st.session_state.to_currency = temp
             st.experimental_rerun()
 
     with col3:
-        # 초기 상태 설정
-        if 'to_currency' not in st.session_state:
-            st.session_state.to_currency = 'USD'
-            
         to_currency = st.selectbox(
             "변환된 통화",
             ['KRW'] + list(CURRENCIES.keys()),
-            key='to_currency'
+            key='to_currency',
+            index=['KRW'] + list(CURRENCIES.keys()).index(st.session_state.to_currency)
         )
 
 # 환율 계산 및 결과 표시
