@@ -257,6 +257,13 @@ def create_currency_chart(df, currency, currency_info):
         }
     }
     
+    # 툴팁 설정
+    tooltip = [
+        alt.Tooltip('날짜:T', title='날짜', format='%Y-%m-%d'),
+        alt.Tooltip('환율:Q', title='환율', format=',.2f'),
+        alt.Tooltip('구분:N', title='구분')
+    ]
+    
     # 실제 데이터 라인
     base = alt.Chart(df_with_prediction).encode(
         x=alt.X('날짜:T', 
@@ -289,7 +296,7 @@ def create_currency_chart(df, currency, currency_info):
                            labelFontSize=12,
                            titleFontSize=14
                        )),
-        tooltip=['날짜', '환율', '구분']
+        tooltip=tooltip
     ).properties(
         title=alt.TitleParams(
             text=f'{currency}/KRW ({currency_info["name"]}) 환율 추이 및 예측',
@@ -299,23 +306,37 @@ def create_currency_chart(df, currency, currency_info):
         )
     )
     
-    # 실제 데이터 라인
+    # 실제 데이터 라인과 포인트
     actual_line = base.mark_line(
-        size=4
+        size=3
     ).transform_filter(
         alt.datum.구분 == '실제'
     )
     
-    # 예측 데이터 라인
+    actual_points = base.mark_circle(
+        size=60,
+        opacity=0.7
+    ).transform_filter(
+        alt.datum.구분 == '실제'
+    )
+    
+    # 예측 데이터 라인과 포인트
     prediction_line = base.mark_line(
-        size=4,
+        size=3,
         strokeDash=[8, 6]
     ).transform_filter(
         alt.datum.구분 == '예측'
     )
     
+    prediction_points = base.mark_circle(
+        size=60,
+        opacity=0.7
+    ).transform_filter(
+        alt.datum.구분 == '예측'
+    )
+    
     # 차트 결합
-    chart = (actual_line + prediction_line).properties(
+    chart = (actual_line + actual_points + prediction_line + prediction_points).properties(
         height=400  # 차트 높이 증가
     ).configure_axis(
         labelFontSize=14,
