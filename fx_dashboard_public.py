@@ -416,6 +416,18 @@ st.subheader("🧮 환율 계산기")
 with st.container():
     col1, col2, col3 = st.columns([2, 0.5, 2])
     
+    currency_options = ['KRW'] + list(CURRENCIES.keys())
+    
+    # 초기 상태 설정
+    if 'swap_clicked' not in st.session_state:
+        st.session_state.swap_clicked = False
+        st.session_state.from_index = 0  # KRW
+        st.session_state.to_index = 1    # USD
+    
+    def swap_currencies():
+        st.session_state.swap_clicked = True
+        st.session_state.from_index, st.session_state.to_index = st.session_state.to_index, st.session_state.from_index
+    
     with col1:
         amount = st.number_input(
             "금액",
@@ -424,30 +436,29 @@ with st.container():
             step=100.0,
             format="%.2f"
         )
-        currency_options = ['KRW'] + list(CURRENCIES.keys())
         from_currency = st.selectbox(
             "변환할 통화",
             currency_options,
-            key='from_currency',
-            index=currency_options.index(st.session_state.from_currency)
+            index=st.session_state.from_index,
+            key='from_currency'
         )
 
     with col2:
         st.write("")
         st.write("")
-        if st.button("⇄", help="통화 교환", key="swap"):
-            temp = st.session_state.from_currency
-            st.session_state.from_currency = st.session_state.to_currency
-            st.session_state.to_currency = temp
-            st.experimental_rerun()
+        st.button("⇄", help="통화 교환", key="swap", on_click=swap_currencies)
 
     with col3:
         to_currency = st.selectbox(
             "변환된 통화",
             currency_options,
-            key='to_currency',
-            index=currency_options.index(st.session_state.to_currency)
+            index=st.session_state.to_index,
+            key='to_currency'
         )
+    
+    # 선택된 값 저장
+    st.session_state.from_index = currency_options.index(from_currency)
+    st.session_state.to_index = currency_options.index(to_currency)
 
 # 환율 계산 및 결과 표시
 converted_amount = calculate_exchange(amount, from_currency, to_currency, rates_data)
