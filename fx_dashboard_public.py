@@ -433,56 +433,49 @@ for i in range(0, len(CURRENCIES), chart_columns):
 st.markdown("---")
 st.subheader("🧮 환율 계산기")
 
-# 계산기 컨테이너 스타일링
+# 환율 계산기 섹션
 with st.container():
-    col1, col2, col3 = st.columns([2, 0.5, 2])
+    st.subheader("💱 환율 계산기")
     
+    # 통화 옵션 초기화
     currency_options = ['KRW'] + list(CURRENCIES.keys())
     
-    # 초기 상태 설정
-    if 'swap_clicked' not in st.session_state:
-        st.session_state.swap_clicked = False
-        st.session_state.from_index = currency_options.index('USD')  # USD
-        st.session_state.to_index = currency_options.index('KRW')    # KRW
+    # 세션 상태 초기화
+    if 'from_index' not in st.session_state:
+        st.session_state.from_index = currency_options.index('USD')
+    if 'to_index' not in st.session_state:
+        st.session_state.to_index = currency_options.index('KRW')
+    if 'amount' not in st.session_state:
+        st.session_state.amount = 1000.0
     
-    def swap_currencies():
-        st.session_state.swap_clicked = True
-        st.session_state.from_index, st.session_state.to_index = st.session_state.to_index, st.session_state.from_index
+    # 2열 레이아웃
+    col1, col2 = st.columns(2)
     
     with col1:
-        amount = st.number_input(
+        st.session_state.amount = st.number_input(
             "금액",
             min_value=0.0,
-            value=1000.0,
+            value=st.session_state.amount,
             step=100.0,
             format="%.2f"
         )
-        from_currency = st.selectbox(
+        st.session_state.from_index = st.selectbox(
             "변환할 통화",
-            currency_options,
+            range(len(currency_options)),
             index=st.session_state.from_index,
-            key='from_currency'
-        )
-
-    with col2:
-        st.write("")
-        st.write("")
-        st.button("⇄", help="통화 교환", key="swap", on_click=swap_currencies)
-
-    with col3:
-        to_currency = st.selectbox(
-            "변환된 통화",
-            currency_options,
-            index=st.session_state.to_index,
-            key='to_currency'
+            format_func=lambda x: currency_options[x]
         )
     
-    # 선택된 값 저장
-    st.session_state.from_index = currency_options.index(from_currency)
-    st.session_state.to_index = currency_options.index(to_currency)
+    with col2:
+        st.session_state.to_index = st.selectbox(
+            "변환될 통화",
+            range(len(currency_options)),
+            index=st.session_state.to_index,
+            format_func=lambda x: currency_options[x]
+        )
 
 # 환율 계산 및 결과 표시
-converted_amount = calculate_exchange(amount, from_currency, to_currency, rates_data)
+converted_amount = calculate_exchange(st.session_state.amount, currency_options[st.session_state.from_index], currency_options[st.session_state.to_index], rates_data)
 
 # 결과 표시 컨테이너
 with st.container():
@@ -491,7 +484,7 @@ with st.container():
         <div class="exchange-result">
             <h3>변환 결과</h3>
             <p>
-                {amount:,.2f} {from_currency} = {converted_amount:,.2f} {to_currency}
+                {st.session_state.amount:,.2f} {currency_options[st.session_state.from_index]} = {converted_amount:,.2f} {currency_options[st.session_state.to_index]}
             </p>
         </div>
         """,
@@ -499,18 +492,18 @@ with st.container():
     )
 
 # 적용된 환율 정보 표시
-if from_currency != to_currency:
-    if from_currency == 'KRW':
-        rate = 1 / rates_data[to_currency]['환율'].iloc[-1]
-        st.caption(f"적용 환율: 1 {to_currency} = {1/rate:,.2f} {from_currency}")
-    elif to_currency == 'KRW':
-        rate = rates_data[from_currency]['환율'].iloc[-1]
-        st.caption(f"적용 환율: 1 {from_currency} = {rate:,.2f} {to_currency}")
+if currency_options[st.session_state.from_index] != currency_options[st.session_state.to_index]:
+    if currency_options[st.session_state.from_index] == 'KRW':
+        rate = 1 / rates_data[currency_options[st.session_state.to_index]]['환율'].iloc[-1]
+        st.caption(f"적용 환율: 1 {currency_options[st.session_state.to_index]} = {1/rate:,.2f} {currency_options[st.session_state.from_index]}")
+    elif currency_options[st.session_state.to_index] == 'KRW':
+        rate = rates_data[currency_options[st.session_state.from_index]]['환율'].iloc[-1]
+        st.caption(f"적용 환율: 1 {currency_options[st.session_state.from_index]} = {rate:,.2f} {currency_options[st.session_state.to_index]}")
     else:
-        from_rate = rates_data[from_currency]['환율'].iloc[-1]
-        to_rate = rates_data[to_currency]['환율'].iloc[-1]
+        from_rate = rates_data[currency_options[st.session_state.from_index]]['환율'].iloc[-1]
+        to_rate = rates_data[currency_options[st.session_state.to_index]]['환율'].iloc[-1]
         cross_rate = from_rate / to_rate
-        st.caption(f"적용 환율: 1 {from_currency} = {cross_rate:,.4f} {to_currency}")
+        st.caption(f"적용 환율: 1 {currency_options[st.session_state.from_index]} = {cross_rate:,.4f} {currency_options[st.session_state.to_index]}")
 
 # JavaScript를 사용하여 화면 너비 감지
 st.markdown("""
