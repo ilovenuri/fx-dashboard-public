@@ -61,6 +61,11 @@ st.markdown("""
         color: #424242 !important;
         font-size: 1rem !important;
     }
+    /* 통화 설명 스타일 */
+    div[data-testid="stMetricLabel"] span {
+        color: #424242 !important;
+        font-size: 0.9rem !important;
+    }
     /* 환율 계산기 결과 스타일 개선 */
     .exchange-result {
         background-color: #E3F2FD;
@@ -275,7 +280,7 @@ def create_currency_chart(df, currency, currency_info):
     return chart
 
 # 🖥️ Streamlit UI 시작
-st.title("💱 실시간 환율 대시보드")
+st.title("💱 환율 대시보드")
 
 # 자동 새로고침 설정
 if 'last_refresh' not in st.session_state:
@@ -307,10 +312,10 @@ for idx, (currency, info) in enumerate(CURRENCIES.items()):
         change_pct = ((current_rate - prev_rate) / prev_rate) * 100
         
         st.metric(
-            label=f"{currency}/KRW ({info['name']})",
+            label=f"{currency}/KRW",
             value=f"{current_rate:,.2f}",
             delta=f"{change_pct:+.2f}%",
-            help=f"전일 대비 변화율: {change_pct:+.2f}%"
+            help=f"{info['name']} (전일 대비 변화율: {change_pct:+.2f}%)"
         )
 
 # 중간 섹션: 환율 추이 그래프
