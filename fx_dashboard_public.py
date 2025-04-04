@@ -29,12 +29,12 @@ st.markdown("""
     }
     .stMetric {
         border: 1px solid #e0e0e0;
-        padding: 10px;
+        padding: 15px;
         border-radius: 5px;
     }
     div[data-testid="metric-container"] {
         border: 1px solid #e0e0e0;
-        padding: 10px;
+        padding: 15px;
         border-radius: 5px;
     }
     div[data-testid="stVerticalBlock"] > div {
@@ -49,20 +49,22 @@ st.markdown("""
     /* 환율 표시 스타일 개선 */
     div[data-testid="stMetricValue"] {
         color: #1E88E5 !important;
-        font-size: 1.5rem !important;
+        font-size: 2rem !important;
         font-weight: bold !important;
     }
     div[data-testid="stMetricDelta"] {
-        font-size: 1rem !important;
+        font-size: 1.2rem !important;
+        padding-top: 0.5rem !important;
     }
     div[data-testid="stMetricLabel"] {
         color: #424242 !important;
-        font-size: 1rem !important;
+        font-size: 1.2rem !important;
+        font-weight: 500 !important;
     }
     /* 통화 설명 스타일 */
     div[data-testid="stMetricLabel"] span {
         color: #424242 !important;
-        font-size: 0.9rem !important;
+        font-size: 1rem !important;
     }
     /* 환율 계산기 결과 스타일 개선 */
     .exchange-result {
@@ -79,15 +81,13 @@ st.markdown("""
     }
     .exchange-result p {
         color: #1565C0;
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         margin: 10px 0;
         font-weight: bold;
     }
     /* 차트 컨테이너 스타일 */
     .chart-container {
-        border: 1px solid #e0e0e0;
-        padding: 15px;
-        border-radius: 10px;
+        padding: 5px;
         margin: 10px 0;
     }
     /* 섹션 제목 스타일 */
